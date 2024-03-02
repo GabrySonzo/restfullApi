@@ -1,11 +1,10 @@
-curl -X POST http://localhost/www/restfullApi/www/3/4/5 -H "Content-Type: application/json" 
--d '{"name":"John", "age":30, "car":null}'
+curl -X POST http://localhost/restfullApi/ -H "Content-Type: application/json" -H "Accept:application/xml" -d {\"nome\":\"SanGiovanniBianco\",\"cap\":\"24015\"} -v
 
-curl -X POST http://localhost/www/restfullApi/index.php -H "Content-Type: application/json" -H "Accept:application/xml" -d {\"nome\":\"jjj\",\"valore\":\"1\"} -v
+curl -X DELETE http://localhost/restfullApi/ -H "Content-Type: application/json" -H "Accept:application/xml" -d {\"nome\":\"SanGiovanniBianco\",\"cap\":\"24015\"} -v
 
-curl -X POST http://localhost/www/restfullApi/index.php -H "Content-Type: application/xml" -H "Accept:application/xml" -d "<?xml version=\"1.0\"?><doc><nome>fff</nome><valore>2</valore></doc>" -v
+curl -X GET http://localhost/restfullApi/SanGiovanniBianco -H "Content-Type: application/json" -H "Accept:application/xml" -v
 
-curl -X POST http://localhost/www/restfullApi/index.php -H "Content-Type: application/xml" -H "Accept:application/xml" -d <array><nome>fff</nome><valore>2</valore><nome>aaa</nome><valore>4</valore></array> -v
+curl -X PUT http://localhost/restfullApi/SanGiovanniBianco -H "Content-Type: application/json" -H "Accept:application/xml" -d {\"cap\":\"24013\"} -v
 
 <?xml version="1.0"?><doc><rec><nome>fff</nome><valore>2</valore></rec><rec><nome>aaa</nome><valore>4</valore></rec></doc>
 

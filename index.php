@@ -2,15 +2,15 @@
 include "connessione.php";
 /*header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
 
 foreach($_SERVER as $chiave=>$valore){
     echo $chiave."-->".$valore."\n<br>";
 }
-
 */
+
 //elabora header
 $metodo = $_SERVER["REQUEST_METHOD"];
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -28,44 +28,7 @@ echo $type[1];
 //echo "metodo-->".$metodo;
 
 if ($metodo=="GET"){
-    echo "get";       
-}
-if ($metodo=="POST"){
-    echo "post\n";
-    //recupera i dati dall'header
-   $body=file_get_contents('php://input');
-   // echo $body
-   
-   //converte in array associativo
-    if ($type[1]=="json"){
-        $data = json_decode($body,true);
-    }
-    if ($type[1]=="xml"){
-        $xml = simplexml_load_string($body);
-        $json = json_encode($xml);
-        $data = json_decode($json, true);
-    }
-    
-    //elabora i dati o interagisce con il database
-    $data["valore"]+=2000;
-    
-    //settaggio dei campi dell'header
-    header("Content-Type: ".$retct);    
-    //restituisce i dati convertiti nel formato richiesto
-    if ($ret[1]=="json"){
-        echo json_encode($data);
-    }
-    if ($ret[1]=="xml"){
-        $xml = new SimpleXMLElement('<root/>');
-        array_walk_recursive($data, array ($xml, 'addChild'));    
-        echo $xml->asXML();
-        //alternativa
-        $r='<?xml version="1.0"?><rec><nome>'.$data["nome"].'</nome><valore>'.$data["valore"].'</valore></rec>';
-    }
-   
-}
-if ($metodo=="PUT"){
-    echo "PUT";
+    echo "GET\n";
     
     $body=file_get_contents('php://input');
    // echo $body
@@ -80,20 +43,111 @@ if ($metodo=="PUT"){
         $data = json_decode($json, true);
     }
 
-    $query="INSERT INTO `comuni` (`nome`, `cap`) VALUES ('".$data["nome"]."', '".$data["cap"]."')";
-    $risultato = $connessione->query($query);
-    if ($risultato){
-        echo "inserimento avvenuto";
+    if(isset($uri[2])){
+        $query = "SELECT * FROM comuni WHERE nome='".$uri[2]."'";
     }
     else{
-        echo "inserimento fallito";
-    }echo "put";
-    //codice di risposta
-    http_response_code(404);
+        $query = "SELECT * FROM comuni";
+    }
+
+    $risultato = $connessione->query($query)->fetch_assoc();
+    
+    if($risultato){
+        echo "comune trovato";
+        header("Content-Type: ".$retct);    
+        //restituisce i dati convertiti nel formato richiesto
+        if ($ret[1]=="json"){
+            echo json_encode($risultato);
+        }
+        if ($ret[1]=="xml"){
+            $xml = new SimpleXMLElement('<root/>');
+            array_walk_recursive($risultato, array ($xml, 'addChild'));    
+            echo $xml->asXML();
+            //alternativa
+            $r='<?xml version="1.0"?><rec><nome>'.$risultato["nome"].'</nome><cap>'.$risultato["cap"].'</cap></rec>';
+        }
+    }
+    else{
+        echo "comune non trovato";
+    }
+    
+    if ($metodo=="POST"){
+        echo "POST\n";
+        
+        $body=file_get_contents('php://input');
+        // echo $body
+        
+        //converte in array associativo
+        if ($type[1]=="json"){
+            $data = json_decode($body,true);
+        }
+        if ($type[1]=="xml"){
+            $xml = simplexml_load_string($body);
+            $json = json_encode($xml);
+            $data = json_decode($json, true);
+        }
+        
+        $query="INSERT INTO `comuni` (`nome`, `cap`) VALUES ('".$data["nome"]."', '".$data["cap"]."')";
+        $risultato = $connessione->query($query);
+        if ($risultato){
+            echo "inserimento avvenuto";
+        }
+        else{
+            echo "inserimento fallito";
+        }
+        }
+        if ($metodo=="DELETE"){
+        echo "delete\n";
+        
+        $body=file_get_contents('php://input');
+        // echo $body
+        
+        //converte in array associativo
+        if ($type[1]=="json"){
+            $data = json_decode($body,true);
+        }
+        if ($type[1]=="xml"){
+            $xml = simplexml_load_string($body);
+            $json = json_encode($xml);
+            $data = json_decode($json, true);
+        }
+        
+        $query = "DELETE FROM `comuni` WHERE `nome`='".$data["nome"]."' AND `cap`='".$data["cap"]."'";
+        if($connessione->query($query)){
+            echo "cancellazione avvenuta";
+        }
+        else{
+            echo "cancellazione fallita";
+        }
+        
+        http_response_code(404);
+    }
 }
-if ($metodo=="DELETE"){
-    echo "delete";
-    http_response_code(404);
+if ($metodo=="PUT"){
+    echo "PUT\n";
+    //recupera i dati dall'header
+    $body=file_get_contents('php://input');
+    // echo $body
+    
+    //converte in array associativo
+    if ($type[1]=="json"){
+        $data = json_decode($body,true);
+    }
+    if ($type[1]=="xml"){
+        $xml = simplexml_load_string($body);
+        $json = json_encode($xml);
+        $data = json_decode($json, true);
+    }
+    
+    $query = "UPDATE `comuni` SET `cap`='".$data["cap"]."' WHERE `nome`='".$uri[2]."'";
+    
+    
+    if($connessione->query($query)){
+        echo "aggiornamento avvenuto";
+    }
+    else{
+        echo "aggiornamento fallito";
+    }
 }
 
 
