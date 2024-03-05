@@ -1,8 +1,10 @@
 curl -X POST http://localhost/restfullApi/ -H "Content-Type: application/json" -H "Accept:application/xml" -d {\"nome\":\"SanGiovanniBianco\",\"cap\":\"24015\"} -v
 
-curl -X DELETE http://localhost/restfullApi/ -H "Content-Type: application/json" -H "Accept:application/xml" -d {\"nome\":\"SanGiovanniBianco\",\"cap\":\"24015\"} -v
+curl -X DELETE http://localhost/restfullApi/SanGiovanniBianco -H "Content-Type: application/json" -H "Accept:application/xml" -v
 
 curl -X GET http://localhost/restfullApi/SanGiovanniBianco -H "Content-Type: application/json" -H "Accept:application/xml" -v
+
+curl -X GET http://localhost/restfullApi/ -H "Content-Type: application/json" -H "Accept:application/json" -v
 
 curl -X PUT http://localhost/restfullApi/SanGiovanniBianco -H "Content-Type: application/json" -H "Accept:application/xml" -d {\"cap\":\"24013\"} -v
 
