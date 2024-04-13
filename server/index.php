@@ -90,7 +90,7 @@ if ($metodo=="POST"){
     echo "POST\n";
     
     $body=file_get_contents('php://input');
-    // echo $body
+    echo $body
     
     //converte in array associativo
     if ($type[1]=="json"){
@@ -102,14 +102,12 @@ if ($metodo=="POST"){
         $data = json_decode($json, true);
     }
     
-    $query="INSERT INTO `comuni` (`nome`, `cap`) VALUES ('".$data["nome"]."', '".$data["cap"]."')";
+    $query="INSERT INTO `comuni` (`nome`, `cap`) VALUES ('".$data["city"]."', '".$data["cap"]."')";
     $risultato = $connessione->query($query);
     if ($risultato){
-        echo "inserimento avvenuto";
         http_response_code(200);
     }
     else{
-        echo "inserimento fallito";
         http_response_code(400);
     }
     }

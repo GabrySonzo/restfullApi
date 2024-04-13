@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <title>crud</title>
+    </head>
+    <body>
+
+        <script>
+            function create() {
+                var city = prompt("Enter city name");
+                var cap = prompt("Enter city cap");
+                fetch("http://localhost/www/restfullApi/server", { 
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Http_Accept": "application/json",
+
+                    },
+                    body: JSON.stringify({city: city, cap: cap})
+                }).then(response => {
+                    console.log(response);
+                });
+            }
+
+            function remove() {
+                var city = prompt("Enter city name");
+                var xhr = new XMLHttpRequest();
+                xhr.open("DELETE", "http://localhost:8080/crud/city/" + city, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        console.log(xhr.responseText);
+                    }
+                }
+                xhr.send();
+            }
+
+            function update() {
+                var city = prompt("Enter city name");
+                var cap = prompt("Enter city cap");
+                var xhr = new XMLHttpRequest();
+                xhr.open("PUT", "http://localhost:8080/crud/city/" + city, true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        console.log(xhr.responseText);
+                    }
+                }
+                xhr.send(JSON.stringify({cap: cap}));
+            }
+
+            function delate() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("DELETE", "http://localhost:8080/crud/city", true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        console.log(xhr.responseText);
+                    }
+                }
+                xhr.send();
+            }
+        </script>
+
+        <h1>CRUD for city cap</h1>
+        <button onclick="create()">Create</button>
+        <button>Remove</button>
+        <button>Update</button>
+        <button>Delate</button>
+
+    </body>
+</html>
