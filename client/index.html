@@ -8,18 +8,15 @@
             function create() {
                 var city = prompt("Enter city name");
                 var cap = prompt("Enter city cap");
-                fetch("http://localhost/www/restfullApi/server", { 
+                fetch("http://localhost/www/restfullApi/server", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "Http_Accept": "application/json",
-
                     },
                     body: JSON.stringify({city: city, cap: cap})
                 }).then(response => {
-                    response.json().then(message => {
-                        console.log(message);
-                    });
+                    console.log(response);
                 });
             }
 
@@ -30,11 +27,10 @@
                         "Content-Type": "application/json",
                         "Http_Accept": "application/json",
                     }
-                }).then(response => {
-                    return response.json();
-                }).then(data => {
-                    console.log(data);
-                });
+                }).then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    });
             }
 
             function update() {
