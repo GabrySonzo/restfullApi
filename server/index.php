@@ -72,14 +72,15 @@ if ($metodo=="GET"){
                 }
             }
             http_response_code(200);
+            echo json_encode($row);
         }
         else{
-            echo "comune non trovato";
+            echo json_encode(array("message" => "Nessun comune trovato"));
             http_response_code(404);    
         }
     }
     else{
-        echo "ricerca fallita";
+        echo json_encode(array("message" => "Errore nella query"));
         http_response_code(400);
     }
     
@@ -90,7 +91,7 @@ if ($metodo=="POST"){
     echo "POST\n";
     
     $body=file_get_contents('php://input');
-    echo $body
+    echo $body;
     
     //converte in array associativo
     if ($type[1]=="json"){
@@ -106,9 +107,11 @@ if ($metodo=="POST"){
     $risultato = $connessione->query($query);
     if ($risultato){
         http_response_code(200);
+        echo json_encode(array("message" => "comune inserito"));
     }
     else{
         http_response_code(400);
+        echo json_encode(array("message" => "errore nell'inserimento"));
     }
     }
 
