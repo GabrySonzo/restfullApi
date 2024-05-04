@@ -5,27 +5,27 @@
     <body>
 
         <script>
+            var url = "http://localhost/www/restfullApi/server/index.php";
             function create() {
-                var city = prompt("Enter city name");
-                var cap = prompt("Enter city cap");
-                fetch("http://localhost/www/restfullApi/server", {
-                    method: "POST",
+                const city = prompt("Enter city name");
+                const cap = prompt("Enter city cap");
+                fetch(url, {
+                    method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
-                        "Http_Accept": "application/json",
                     },
-                    body: JSON.stringify({city: city, cap: cap})
-                }).then(response => {
-                    console.log(response);
-                });
+                    body: JSON.stringify({city, cap})
+                }).then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    });
             }
 
             function read() {
-                fetch("http://localhost/www/restfullApi/server", {
-                    method: "GET",
+                fetch(url, {
+                    method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
-                        "Http_Accept": "application/json",
                     }
                 }).then(response => response.json())
                     .then(data => {
@@ -38,7 +38,7 @@
                 var cap = prompt("Enter city cap");
                 var newCity = prompt("Enter new city name");
                 var newCap = prompt("Enter new city cap");
-                fetch("http://localhost/www/restfullApi/server", {
+                fetch(url, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -52,7 +52,7 @@
 
             function delate() {
                 var city = prompt("Enter city name");
-                fetch("http://localhost/www/restfullApi/server", {
+                fetch(url, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
